@@ -1,13 +1,17 @@
 package com.yqb.fastec;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 
-public class MainActivity extends AppCompatActivity {
+import com.yqb.latte_core.activities.ProxyActivity;
+import com.yqb.latte_core.delegates.LatteDelegate;
 
+public class MainActivity extends ProxyActivity {
+
+    private static final String TAG = "MainActivity";
+    
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public LatteDelegate setRootDelegate() {
+        Log.i(TAG, "setRootDelegate: ");
+        return new ExampleDelegate();
     }
 }
