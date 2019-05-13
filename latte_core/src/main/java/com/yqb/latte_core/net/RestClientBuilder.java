@@ -13,6 +13,7 @@ import com.yqb.latte_core.net.callback.IRequest;
 import com.yqb.latte_core.net.callback.ISuccess;
 import com.yqb.latte_core.ui.LoaderStyle;
 
+import java.io.File;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -35,9 +36,10 @@ public class RestClientBuilder {
     private IError mIError = null;
     private RequestBody mBody = null;
     private LoaderStyle mLoaderStyle = null;
+    private File mFile = null;
     private Context mContext = null;
 
-    //除了RestClient，不允许外部类去new这个RestClientBuilder类
+    //不加public修饰，除了此module中的类（如RestClient等），不允许外部类去new这个RestClientBuilder类
     RestClientBuilder() {
     }
 
@@ -59,6 +61,16 @@ public class RestClientBuilder {
         }*/    //使用惰性加载，肯定不为null
         //this.mParams.put(key, value);
         PARAMS.put(key, value);
+        return this;
+    }
+
+    public final RestClientBuilder file(File file) {
+        this.mFile = file;
+        return this;
+    }
+
+    public final RestClientBuilder file(String file) {
+        this.mFile = new File(file);
         return this;
     }
 
@@ -109,6 +121,6 @@ public class RestClientBuilder {
     }
 
     public final RestClient build() {
-        return new RestClient(mUrl, /*mParams*/PARAMS, mIRequest, mISuccess, mIFailure, mIError, mBody, mLoaderStyle, mContext);
+        return new RestClient(mUrl, /*mParams*/PARAMS, mIRequest, mISuccess, mIFailure, mIError, mBody, mLoaderStyle, mFile, mContext);
     }
 }
