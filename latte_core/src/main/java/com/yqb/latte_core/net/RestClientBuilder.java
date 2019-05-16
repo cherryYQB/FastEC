@@ -39,6 +39,10 @@ public class RestClientBuilder {
     private File mFile = null;
     private Context mContext = null;
 
+    private String mDownloadDir = null;
+    private String mExtension = null;
+    private String mName = null;
+
     //不加public修饰，除了此module中的类（如RestClient等），不允许外部类去new这个RestClientBuilder类
     RestClientBuilder() {
     }
@@ -71,6 +75,23 @@ public class RestClientBuilder {
 
     public final RestClientBuilder file(String file) {
         this.mFile = new File(file);
+        return this;
+    }
+
+    public final RestClientBuilder name(String name) {
+        this.mName = name;
+        return this;
+    }
+
+    //下载完文件后的存放路径
+    public final RestClientBuilder dir(String dir) {
+        this.mDownloadDir = dir;
+        return this;
+    }
+
+    //文件后缀名
+    public final RestClientBuilder extension(String extension) {
+        this.mExtension = extension;
         return this;
     }
 
@@ -121,6 +142,6 @@ public class RestClientBuilder {
     }
 
     public final RestClient build() {
-        return new RestClient(mUrl, /*mParams*/PARAMS, mIRequest, mISuccess, mIFailure, mIError, mBody, mLoaderStyle, mFile, mContext);
+        return new RestClient(mUrl, /*mParams*/PARAMS, mIRequest, mDownloadDir, mExtension, mName, mISuccess, mIFailure, mIError, mBody, mLoaderStyle, mFile, mContext);
     }
 }

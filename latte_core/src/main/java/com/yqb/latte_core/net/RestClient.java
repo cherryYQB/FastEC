@@ -3,7 +3,6 @@ package com.yqb.latte_core.net;
 /**
  * Author   yaoqinbao
  * Time     2019/5/9
- * <p>
  */
 
 /**
@@ -18,6 +17,7 @@ import com.yqb.latte_core.net.callback.IFailure;
 import com.yqb.latte_core.net.callback.IRequest;
 import com.yqb.latte_core.net.callback.ISuccess;
 import com.yqb.latte_core.net.callback.RequestCallbacks;
+import com.yqb.latte_core.net.download.DownloadHandler;
 import com.yqb.latte_core.ui.LatteLoader;
 import com.yqb.latte_core.ui.LoaderStyle;
 
@@ -30,6 +30,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.http.Url;
 
 /**
  * RestClient在每次build的时候都会生成一个全新的实例，而参数是一次构造完成，不允许更改
@@ -41,6 +42,9 @@ public class RestClient {
     //用final修饰，不允许更改，书写上用final修饰一般都是大写
     private final String URL;
     private final IRequest REQUEST;
+    private final String DOWNLOAD_DIR;
+    private final String EXTENSION;
+    private final String NAME;
     private final ISuccess SUCCESS;
     private final IFailure FAILURE;
     private final IError ERROR;
@@ -53,6 +57,9 @@ public class RestClient {
     public RestClient(String url,
                       Map<String, Object> params,
                       IRequest request,
+                      String downloadDir,
+                      String extension,
+                      String name,
                       ISuccess success,
                       IFailure failure,
                       IError error,
@@ -64,6 +71,9 @@ public class RestClient {
         //this.PARAMS = params;
         PARAMS.putAll(params);
         this.REQUEST = request;
+        this.DOWNLOAD_DIR = downloadDir;
+        this.EXTENSION = extension;
+        this.NAME = name;
         this.SUCCESS = success;
         this.FAILURE = failure;
         this.ERROR = error;
@@ -154,5 +164,10 @@ public class RestClient {
 
     public final void delete() {
         request(HttpMethod.DELETE);
+    }
+
+    public final void download() {
+        new DownloadHandler(URL, REQUEST, DOWNLOAD_DIR, EXTENSION, NAME, SUCCESS, FAILURE, ERROR)
+                .handleDownload();
     }
 }
